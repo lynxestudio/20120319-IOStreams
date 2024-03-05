@@ -22,11 +22,11 @@ Primeramente en el código utilizamos las clases <tt>FileStream</tt>, <tt>Binary
 </pre><br />
 Con las siguientes lineas utilizamos la clase <tt>FileInfo</tt> para obtener algunas propiedades acerca del archivo, propiedades que mostramos en las etiquetas de la interfaz.<br />
 <pre>
-	file = new FileInfo(fc.Filename);<br />
-	int size = Convert.ToInt32(file.Length);<br />
-	lbFileName.Text = file.Name;<br />
-	lbWriteTime.Text = file.LastWriteTime.ToString();<br />
-	lbFileSize.Text = size.ToString();<br />
+	file = new FileInfo(fc.Filename);
+	int size = Convert.ToInt32(file.Length);
+	lbFileName.Text = file.Name;
+	lbWriteTime.Text = file.LastWriteTime.ToString();
+	lbFileSize.Text = size.ToString();
 </pre>
 <br />
 Ahora con el siguiente código implementamos toda la funcionalidad para la lectura de un archivo binario, utilizando un <tt>FileStream</tt> hacia un archivo creando un flujo de bytes como entrada que dirigimos hacia un <a href="http://msdn.microsoft.com/en-us/library/system.io.binaryreader.aspx">BinaryReader</a> (Lector binario) con el cuál utilizando el metódo <a href="http://msdn.microsoft.com/en-us/library/system.io.binaryreader.readbytes.aspx">ReadBytes</a> para leer un arreglo de 128 bytes que son los bytes que contienen los datos del ID3 tag. <br />
@@ -37,22 +37,23 @@ Ahora con el siguiente código implementamos toda la funcionalidad para la lectu
 	{
 		int offset = size - 128;
 		reader.BaseStream.Position = offset;
-
 		b = reader.ReadBytes(128);
 	}
 </pre> 
 Una vez obtenido el arreglo de bytes,lo convertimos a caracteres, para que utilicemos la longitud y la posición correcta de cada dato según el estándar ID3, esto se logra con el siguiente código:<br />
 <pre>
-	char[] c = new char[128];<br />
-	for(int i = 0;i < b.Length;i++)<br /> c[i] = (char)b[i];<br />
-	string strTag = new string(c,0,3);<br />
-	if(strTag.Equals("TAG")){<br /> 
-		PutMsg("File loaded");<br />
-		txtTitle.Text = new string(c,3,30);<br />
-		txtArtist.Text = new string(c,33,30);<br />
-		txtAlbum.Text = new string(c,63,30);<br />
-		txtYear.Text = new string(c,93,4);<br />
-		txtComments.Buffer.Text = new string(c,97,30);<br />
+	char[] c = new char[128];
+	for(int i = 0;i < b.Length;i++)
+	c[i] = (char)b[i];
+	string strTag = new string(c,0,3);
+	if(strTag.Equals("TAG"))
+	{
+		PutMsg("File loaded");
+		txtTitle.Text = new string(c,3,30);
+		txtArtist.Text = new string(c,33,30);
+		txtAlbum.Text = new string(c,63,30);
+		txtYear.Text = new string(c,93,4);
+		txtComments.Buffer.Text = new string(c,97,30);
 	}
 </pre>
 Una vez compilada la aplicación, al ejecutarse utilizaremos el botón 
